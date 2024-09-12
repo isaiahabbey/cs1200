@@ -37,8 +37,16 @@ class BTvertex:
 # ... tree rooted at vertex v to the size of that subtree
 # Runtime: O(n)
 def calculate_sizes(v):
-    # Your code goes here
+    if v is None:
+        return 0
+    left_size = calculate_sizes(v.left)
+    right_size = calculate_sizes(v.right)
+
+    v.size = 1 + left_size + right_size
+    return v.size 
     pass 
+
+#The operating time is O(n) because the program runs through every vertex to find the subtrees, so it has a linear relation to the number of nodes
 
 
 #
@@ -52,5 +60,16 @@ def calculate_sizes(v):
 # Runtime: O(h) 
 
 def FindDescendantOfSize(t, v):
-    # Your code goes here 
+    if v is None:
+        return 0
+    #this will return the node that has a subtree with a size within these constraints
+    if t <= v.size <= 2*t:
+        return v
+    if v.size >= t and v.left.size is not None:
+        return FindDescendantOfSize(t,v.left)
+    if v.size < t and v.right.size is not None:
+        return FindDescendantOfSize(t,v.right)
+    return None
     pass 
+    
+#since h is the height of the subtree rooted at v, the program needs to search all nodes to find a descendant with thr desired subtree size. so depending how many generations there are (the height) determines how many nodes will be searched
